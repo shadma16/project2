@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phonebook</title>
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to right, #141e30, #243b55);
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .mainContainer {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+
+        .insertClass {
+            flex: 1;
+            min-width: 250px;
+            max-width: 350px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .insertClass label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .insertClass input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            outline: none;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            transition: 0.3s;
+        }
+
+        .insertClass input:focus {
+            border: 2px solid #ffd700;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .insertClass input[type="submit"] {
+            background: #ffd700;
+            color: #333;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 15px;
+        }
+
+        .insertClass input[type="submit"]:hover {
+            background: #ffcc00;
+            transform: scale(1.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        table th, table td {
+            padding: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        table th {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        table td {
+            text-align: center;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .mainContainer {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>📞 PHONEBOOK</h1>
+
+    <div class="mainContainer">
+        
+        <!-- Insert Section -->
+        <div class="insertClass">
+            <form action="ADD_URL" method="post">
+                {% csrf_token %}
+                <label for="inputName"><i class="fas fa-user"></i> Name</label>
+                <input type="text" name="inputName" id="inputName" placeholder="Enter Name">
+                
+                <label for="inputNumber"><i class="fas fa-phone"></i> Phone Number</label>
+                <input type="number" name="inputNumber" id="inputNumber" placeholder="Enter Number">
+                
+                <input type="submit" value="Insert">
+                <div class="message">{{ key_Add }}</div>
+            </form>
+        </div>
+
+        <!-- Display Section -->
+        <div class="insertClass">
+            <form action="DISPLAY_URL">
+                <input type="submit" value="Display">
+                <table border="1">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Phone</th>
+                    </tr>
+                    {% for i in phn %}
+                    <tr>
+                        <td>{{ i.id }}</td>
+                        <td>{{ i.name }}</td>
+                        <td>{{ i.number }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </form>
+        </div>
+
+        <!-- Delete Section -->
+        <div class="insertClass">
+            <form action="DELETE_URL" method="post">
+                {% csrf_token %}
+                <label for="deleteName"><i class="fas fa-trash"></i> Enter Name or ID</label>
+                <input type="text" name="deleteName" id="deleteName" placeholder="Enter Name/ID">
+                
+                <input type="submit" value="Delete">
+                <div class="message">{{ key_Delete }}</div>
+            </form>
+        </div>
+
+        <!-- Update Section -->
+        <div class="insertClass">
+            <form action="UPDATE_URL" method="post">
+                {% csrf_token %}
+                <label for="inputOldName"><i class="fas fa-edit"></i> Old Name</label>
+                <input type="text" name="inputOldName" id="inputOldName" placeholder="Enter Old Name">
+                
+                <label for="inputNewName"><i class="fas fa-user-edit"></i> New Name</label>
+                <input type="text" name="inputNewName" id="inputNewName" placeholder="Enter New Name">
+                
+                <input type="submit" value="Update">
+                <div class="message">{{ key_Update }}</div>
+            </form>
+        </div>
+
+    </div>
+
+</body>
+</html>
